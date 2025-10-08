@@ -5,12 +5,24 @@
 }
 
 :root {
+  --color-sea-green-50: #f1f8f3;
+  --color-sea-green-100: #ddeee0;
+  --color-sea-green-200: #bedcc5;
+  --color-sea-green-300: #93c2a1;
+  --color-sea-green-400: #64a37a;
+  --color-sea-green-500: #468b60;
+  --color-sea-green-600: #316a47;
+  --color-sea-green-700: #27553b;
+  --color-sea-green-800: #214430;
+  --color-sea-green-900: #1c3829;
+  --color-sea-green-950: #0f1f16;
+
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: var(--color-sea-green-950);
+  background-color: #fff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
