@@ -1,0 +1,117 @@
+.register {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 6rem 1rem;
+  background-color: var(--color-sea-green-50);
+  box-shadow: 0 0 1px var(--color-sea-green-700);
+  border-radius: 0.5rem;
+}
+
+.register h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  user-select: none;
+}
+
+.register form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.register input {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  transition: border-color 0.3s ease;
+}
+
+.register input:focus {
+  outline: none;
+  border-color: var(--color-sea-green-700);
+  box-shadow: 0 0 1px var(--color-sea-green-700);
+}
+
+.register .password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.register .password-input {
+  padding-right: 2.5rem;
+}
+
+.register .toggle-password-icon {
+  position: absolute;
+  top: 55%;
+  right: 0.75rem;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  transition: color 0.3s ease;
+}
+
+.register .toggle-password-icon:hover {
+  color: #d3d3d3;
+}
+
+.register .submit-button {
+  padding: 0.75rem;
+  color: #fff;
+  background-color: var(--color-sea-green-700);
+
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  user-select: none;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.register .submit-button:hover {
+  background-color: var(--color-sea-green-800);
+}
+
+.register span {
+  color: #dc3545;
+  font-size: 0.9rem;
+  margin-top: -0.5rem;
+  user-select: none;
+}
+
+@media (max-width: 850px) {
+  .register {
+    padding: 6rem 0.5rem;
+    border-radius: 0;
+  }
+
+  .register form {
+    max-width: 100%;
+    padding: 0 0.5rem;
+  }
+
+  .register h1 {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .register input,
+  .register .submit-button {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+}

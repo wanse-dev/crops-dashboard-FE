@@ -14,17 +14,17 @@ import type { RegisterFormInputs } from "../../types/RegisterFormInputs";
 
 const validationsSchema = Joi.object<RegisterFormInputs>({
   username: Joi.string().required().messages({
-    "string.empty": "Username is required",
+    "string.empty": "Se requiere un nombre de usuario",
   }),
   email: Joi.string()
     .email({ tlds: { allow: false } })
     .required()
     .messages({
-      "string.email": "Invalid email format",
-      "string.empty": "Email is required",
+      "string.email": "Formato de email inválido",
+      "string.empty": "Se requiere un email",
     }),
   password: Joi.string().required().messages({
-    "string.empty": "Password is required",
+    "string.empty": "Se requiere una contraseña",
   }),
 });
 
@@ -62,12 +62,12 @@ export const Register = () => {
 
   return (
     <div className="register">
-      <h1>Register your account</h1>
+      <h1>Registrar una cuenta</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
           {...register("username")}
           className="text-input"
-          placeholder="Enter username"
+          placeholder="Ingrese un nombre de usuario"
         />
         {errors.username && <span>{errors.username.message}</span>}
 
@@ -75,7 +75,7 @@ export const Register = () => {
           {...register("email")}
           autoComplete="current-email"
           className="text-input"
-          placeholder="Enter email"
+          placeholder="Ingrese un email"
         />
         {errors.email && <span>{errors.email.message}</span>}
 
@@ -85,7 +85,7 @@ export const Register = () => {
             type={showPassword ? "text" : "password"}
             autoComplete="current-password"
             className="text-input password-input"
-            placeholder="Enter password"
+            placeholder="Ingrese una contraseña"
           />
           <button
             type="button"
@@ -98,11 +98,11 @@ export const Register = () => {
         {errors.password && <span>{errors.password.message}</span>}
 
         <button type="submit" className="submit-button">
-          {isRegistering ? "Creating user..." : "Register"}
+          {isRegistering ? "Creando usuario..." : "Registrarse"}
         </button>
       </form>
 
-      <Link to="/login">Already have an user? Sign in</Link>
+      <Link to="/login">¿Ya tienes una cuenta? Iniciar sesión</Link>
     </div>
   );
 };
