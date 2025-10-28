@@ -1,5 +1,9 @@
 import "./ComparativeCropsSection.css";
 
 export const ComparativeCropsSection = () => {
-  return <></>;
+  return (
+    <section className="comparative-crops-section">
+
+    </section>
+  );
 };

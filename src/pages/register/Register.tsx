@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import Joi from "joi";
 import { LuEye, LuEyeOff } from "react-icons/lu";
+import axiosInstance from "../../config/axios";
 
 import { createUser } from "../../firebase/auth";
 import { useAuth } from "../../contexts/authContext";
@@ -51,8 +52,17 @@ export const Register = () => {
   const onSubmit = async (data: RegisterFormInputs) => {
     setIsRegistering(true);
     try {
-      await createUser(data.email, data.password);
-      navigate("/tasks");
+      const user = await createUser(data.email, data.password);
+      const sendData = {
+        uid_usuario: user.uid,
+        nombre: data.username
+      };
+      const response = await axiosInstance.post(
+        "/usuario",
+        sendData
+      );
+      console.debug("User created in backend:", response.data);
+      navigate("/");
     } catch (error) {
       console.error("Error during registration:", error);
     } finally {
@@ -61,7 +71,7 @@ export const Register = () => {
   };
 
   return (
-    <div className="register">
+    <div className="register auth-container">
       <h1>Registrar una cuenta</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input

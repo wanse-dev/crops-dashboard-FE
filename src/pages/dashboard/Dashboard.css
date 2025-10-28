@@ -1,0 +1,130 @@
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  overflow: hidden;
+}
+
+.control-panel {
+  background-color: var(--color-sea-green-600);
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+
+  width: 100%;
+
+  flex: 0 0 auto;
+}
+
+.control-panel form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+  align-items: center;
+}
+
+.control-panel input[type="number"],
+.control-panel select {
+  flex: 1;
+  min-width: 150px;
+
+  font-family: inherit;
+  font-size: 14px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: none;
+  background-color: #ffffff;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.control-panel .submit-button {
+  flex: 0 1 auto;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background-color: var(--color-sea-green-800);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.control-panel .submit-button:hover {
+  background-color: var(--color-sea-green-900);
+}
+
+.control-panel input[type="number"]::placeholder {
+  color: #999;
+}
+
+.control-panel select option[value=""][disabled] {
+  color: #999;
+}
+
+.control-panel input[type="number"]:focus,
+.control-panel select:focus {
+  outline: 2px solid var(--color-sea-green-400);
+  outline-offset: 1px;
+}
+
+.control-panel input:disabled,
+.control-panel select:disabled {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.top-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+
+  flex: 1 1 30%;
+
+  min-height: 24vh;
+}
+
+.top-section .country-crops-section {
+  height: 100%;
+  width: 35%;
+  border-radius: 8px;
+  background-color: var(--color-sea-green-500);
+}
+
+.top-section .country-charts-section {
+  height: 100%;
+  width: 65%;
+  border-radius: 8px;
+  background-color: var(--color-sea-green-500);
+}
+
+.bottom-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+
+  flex: 1 1 70%;
+
+  min-height: 55vh;
+}
+
+.bottom-section .region-charts-section {
+  height: 100%;
+  width: 65%;
+  border-radius: 8px;
+  background-color: var(--color-sea-green-500);
+}
+
+.bottom-section .comparative-crops-section {
+  height: 100%;
+  width: 35%;
+  border-radius: 8px;
+  background-color: var(--color-sea-green-500);
+}

@@ -56,8 +56,8 @@ export const Login = () => {
   if (auth?.userLoggedIn) return <Navigate to="/" />;
 
   return (
-    <div className="login">
-      <h1>Log in</h1>
+    <div className="login auth-container">
+      <h1>Iniciar sesión</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
           {...register("email")}

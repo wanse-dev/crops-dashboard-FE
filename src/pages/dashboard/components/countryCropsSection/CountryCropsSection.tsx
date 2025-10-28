@@ -1,5 +1,9 @@
 import "./CountryCropsSection.css";
 
 export const CountryCropsSection = () => {
-  return <></>;
+  return (
+    <section className="country-crops-section">
+
+    </section>
+  );
 };

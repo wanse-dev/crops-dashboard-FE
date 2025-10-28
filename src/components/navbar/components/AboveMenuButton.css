@@ -1,0 +1,8 @@
+.above-menu-button {
+  width: 100%;
+  flex: 0.8;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
