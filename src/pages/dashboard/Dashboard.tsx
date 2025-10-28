@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import type { CultivoData } from "../../types/CultivoData";
 import type { RegionData } from "../../types/RegionData";
 import type { ProvinciaData } from "../../types/ProvinciaData";
+import type { RegionChartsSectionProps } from "../../types/RegionChartsSectionProps";
 
 export const Dashboard = () => {
   const [cultivos, setCultivos] = useState<CultivoData[]>([]);
@@ -24,6 +25,16 @@ export const Dashboard = () => {
   const [selectedNivel, setSelectedNivel] = useState("");
   const [selectedUbicacion1, setSelectedUbicacion1] = useState("");
   const [selectedUbicacion2, setSelectedUbicacion2] = useState("");
+
+  const [appliedFilters, setAppliedFilters] =
+    useState<RegionChartsSectionProps>({
+      añoDesde: "",
+      añoHasta: "",
+      cultivo: "",
+      nivel: "",
+      ubicacion1: "",
+      ubicacion2: "",
+    });
 
   const auth = useAuth();
 
@@ -56,10 +67,23 @@ export const Dashboard = () => {
     fetchData();
   }, []);
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setAppliedFilters({
+      añoDesde: selectedAñoDesde,
+      añoHasta: selectedAñoHasta,
+      cultivo: selectedCultivo,
+      nivel: selectedNivel,
+      ubicacion1: selectedUbicacion1,
+      ubicacion2: selectedUbicacion2,
+    });
+  };
+
   return (
     <div className="dashboard-container">
       <nav className="control-panel">
-        <form action="">
+        <form action="" onSubmit={handleSubmit}>
           <input
             type="number"
             placeholder="Desde año"
@@ -216,7 +240,14 @@ export const Dashboard = () => {
         <CountryChartsSection />
       </div>
       <div className="bottom-section">
-        <RegionChartsSection />
+        <RegionChartsSection
+          añoDesde={appliedFilters.añoDesde}
+          añoHasta={appliedFilters.añoHasta}
+          cultivo={appliedFilters.cultivo}
+          nivel={appliedFilters.nivel}
+          ubicacion1={appliedFilters.ubicacion1}
+          ubicacion2={appliedFilters.ubicacion2}
+        />
         <ComparativeCropsSection />
       </div>
     </div>
