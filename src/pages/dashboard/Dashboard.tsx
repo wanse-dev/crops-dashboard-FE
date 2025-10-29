@@ -7,12 +7,14 @@ import { useAuth } from "../../contexts/authContext";
 import axiosInstance from "../../config/axios";
 import { useState, useEffect } from "react";
 import type { CultivoData } from "../../types/CultivoData";
+import type { PaisData } from "../../types/PaisData";
 import type { RegionData } from "../../types/RegionData";
 import type { ProvinciaData } from "../../types/ProvinciaData";
 import type { RegionChartsSectionProps } from "../../types/RegionChartsSectionProps";
 
 export const Dashboard = () => {
   const [cultivos, setCultivos] = useState<CultivoData[]>([]);
+  const [paises, setPaises] = useState<PaisData[]>([]);
   const [regiones, setRegiones] = useState<RegionData[]>([]);
   const [provincias, setProvincias] = useState<ProvinciaData[]>([]);
 
@@ -48,6 +50,10 @@ export const Dashboard = () => {
       const cultivos = await axiosInstance.get("/cultivo");
       setCultivos(cultivos.data.data || []);
       console.debug("API response for cultivos:", cultivos.data);
+
+      const paises = await axiosInstance.get("/pais");
+      setPaises(paises.data.data || []);
+      console.debug("API response for paises:", paises.data);
 
       const regiones = await axiosInstance.get("/region");
       setRegiones(regiones.data.data || []);
@@ -152,6 +158,7 @@ export const Dashboard = () => {
             <option key="default-level-option" value="" disabled>
               Nivel
             </option>
+            <option value="pais">País</option>
             <option value="region">Región</option>
             <option value="provincia">Provincia</option>
           </select>
@@ -170,6 +177,15 @@ export const Dashboard = () => {
                 ? "Error al cargar"
                 : "Ubicación 1"}
             </option>
+
+            {!loading &&
+              !error &&
+              selectedNivel === "pais" &&
+              paises.map((pais: PaisData) => (
+                <option key={pais.id_pais} value={pais.id_pais}>
+                  {pais.nombre}
+                </option>
+              ))}
 
             {!loading &&
               !error &&
@@ -207,6 +223,15 @@ export const Dashboard = () => {
                 ? "Error al cargar"
                 : "Ubicación 2"}
             </option>
+
+            {!loading &&
+              !error &&
+              selectedNivel === "pais" &&
+              paises.map((pais: PaisData) => (
+                <option key={pais.id_pais} value={pais.id_pais}>
+                  {pais.nombre}
+                </option>
+              ))}
 
             {!loading &&
               !error &&
