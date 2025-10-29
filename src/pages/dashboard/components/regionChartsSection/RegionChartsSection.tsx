@@ -254,7 +254,7 @@ export const RegionChartsSection = ({
 
   return (
     <section className="region-charts-section">
-      <h3>Hectáreas Sembradas por Año</h3>
+      <h3>Hectáreas sembradas por año</h3>
       <div className="chart-wrapper">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart

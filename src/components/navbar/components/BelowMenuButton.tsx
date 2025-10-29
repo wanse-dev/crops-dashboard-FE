@@ -1,16 +1,16 @@
 import "./BelowMenuButton.css";
-import { useState, useEffect } from "react";
-import { useAuth } from "../../../contexts/authContext";
-
+import { LogOut, User } from "lucide-react";
 import { LogoutButton } from "../../logoutButton/LogoutButton";
 
 export const BelowMenuButton = () => {
-  const auth = useAuth();
-
   return (
     <div className="below-menu-button">
-      <LogoutButton>
-        Cerrar sesión
+      <div className="navbar-item navbar-user-info">
+        <User size={28} />
+      </div>
+      <LogoutButton className="navbar-item navbar-logout">
+        <LogOut size={24} />
+        <span>Logout</span>
       </LogoutButton>
     </div>
   );

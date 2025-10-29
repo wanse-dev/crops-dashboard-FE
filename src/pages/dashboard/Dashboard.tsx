@@ -108,7 +108,7 @@ export const Dashboard = () => {
 
           <input
             type="number"
-            placeholder="Hasta Año"
+            placeholder="Hasta año"
             name="year-hasta"
             id="input-year-hasta"
             min={selectedAñoDesde ? Number(selectedAñoDesde) + 1 : 1960}

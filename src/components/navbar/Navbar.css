@@ -7,3 +7,7 @@
 
   box-shadow: 3px 0 15px -2px rgba(28, 56, 41, 0.15);
 }
+
+.navbar-item {
+  width: 100%;
+}

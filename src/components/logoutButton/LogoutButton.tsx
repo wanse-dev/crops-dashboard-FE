@@ -8,7 +8,6 @@ export const LogoutButton = ({ children, className }: any) => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      localStorage.clear();
       console.log("Sesión cerrada correctamente.");
     } catch (error) {
       console.error("Error al cerrar sesión:", error);

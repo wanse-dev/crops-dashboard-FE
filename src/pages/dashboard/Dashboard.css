@@ -7,9 +7,9 @@
 }
 
 .control-panel {
-  background-color: var(--color-sea-green-500);
+  background-color: var(--color-sea-green-400);
   padding: 15px;
-  border-radius: 8px;
+  border-radius: 1px 1px 10px 10px;
   display: flex;
   justify-content: center;
 
@@ -90,20 +90,6 @@
   min-height: 23vh;
 }
 
-.top-section .country-crops-section {
-  height: 100%;
-  width: 35%;
-  border-radius: 8px;
-  background-color: #fff;
-}
-
-.top-section .country-charts-section {
-  height: 100%;
-  width: 65%;
-  border-radius: 8px;
-  background-color: #fff;
-}
-
 .bottom-section {
   display: flex;
   justify-content: space-between;
@@ -113,18 +99,4 @@
   flex: 1 1 70%;
 
   min-height: 60vh;
-}
-
-.bottom-section .region-charts-section {
-  height: 100%;
-  width: 65%;
-  border-radius: 8px;
-  background-color: #fff;
-}
-
-.bottom-section .comparative-crops-section {
-  height: 100%;
-  width: 35%;
-  border-radius: 8px;
-  background-color: #fff;
 }

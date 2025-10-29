@@ -4,19 +4,23 @@
 
   height: 100%;
 
-  padding: 24px;
+  padding: 1rem;
   box-sizing: border-box;
   border: 1px solid #e0e0e0;
 
   overflow: hidden;
+
+  width: 65%;
+  border-radius: 8px;
+  background-color: #fff;
 }
 
 .region-charts-section > h3 {
   margin-top: 0;
-  margin-bottom: 24px;
+  margin-bottom: 1rem;
   font-size: 1.25rem;
   font-weight: 600;
-  color: #222222;
+  color: #222222cb;
 
   flex: 0 0 auto;
 }
