@@ -1,0 +1,61 @@
+.region-charts-section {
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+
+  padding: 24px;
+  box-sizing: border-box;
+  border: 1px solid #e0e0e0;
+
+  overflow: hidden;
+}
+
+.region-charts-section > h3 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #222222;
+
+  flex: 0 0 auto;
+}
+
+.chart-wrapper {
+  flex: 1 1 auto;
+
+  min-height: 250px;
+
+  position: relative;
+}
+
+.region-charts-section > p:only-child {
+  margin: auto;
+  text-align: center;
+  font-size: 1rem;
+  color: #777777;
+}
+
+.recharts-cartesian-axis-tick-value {
+  font-size: 0.75rem;
+  color: #666;
+  font-family: inherit;
+}
+
+.recharts-legend-item-text {
+  color: #333 !important;
+  font-size: 0.875rem;
+}
+
+.recharts-tooltip-wrapper {
+  background-color: #ffffff !important;
+  border: 1px solid #dddddd !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.recharts-tooltip-label {
+  color: #333 !important;
+  font-weight: 600;
+  margin-bottom: 5px !important;
+}

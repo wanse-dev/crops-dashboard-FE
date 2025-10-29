@@ -1,9 +1,19 @@
 import "./RegionChartsSection.css";
 import type { RegionChartsSectionProps } from "../../../../types/RegionChartsSectionProps";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "../../../../contexts/authContext";
 import axiosInstance from "../../../../config/axios";
 import type { CampañaData } from "../../../../types/CampañaData";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 export const RegionChartsSection = ({
   añoDesde,
@@ -19,10 +29,12 @@ export const RegionChartsSection = ({
   const [campañas1, setCampañas1] = useState<CampañaData[]>([]);
   const [campañas2, setCampañas2] = useState<CampañaData[]>([]);
 
+  const [nombreUbicacion1, setNombreUbicacion1] = useState("Ubicacion 1");
+  const [nombreUbicacion2, setNombreUbicacion2] = useState("Ubicacion 2");
+
   const auth = useAuth();
 
   useEffect(() => {
-    // función auxiliar para hacer un solo fetch
     const fetchDatosUbicacion = async (locationId: string) => {
       if (!nivel || !locationId) {
         return [];
@@ -38,6 +50,8 @@ export const RegionChartsSection = ({
         endpointBase = "/campana/porRegion";
       } else if (nivel === "provincia") {
         endpointBase = "/campana/porProvincia";
+      } else if (nivel === "pais") {
+        endpointBase = "/campana/porPais";
       } else {
         return [];
       }
@@ -70,6 +84,22 @@ export const RegionChartsSection = ({
           fetchDatosUbicacion(ubicacion2),
         ]);
 
+        const getNameFromData = (
+          data: any[],
+          currentNivel: string
+        ): string | null => {
+          if (!data || data.length === 0) return null;
+          const item = data[0];
+          if (currentNivel === "provincia" && item.provincia)
+            return item.provincia;
+          if (currentNivel === "region" && item.region) return item.region;
+          if (currentNivel === "pais" && item.pais) return item.pais;
+          return null;
+        };
+
+        setNombreUbicacion1(getNameFromData(data1, nivel) || "Ubicacion 1");
+        setNombreUbicacion2(getNameFromData(data2, nivel) || "Ubicacion 2");
+
         setCampañas1(data1);
         setCampañas2(data2);
 
@@ -80,6 +110,8 @@ export const RegionChartsSection = ({
         console.debug("Error fetching data:", error);
         setCampañas1([]);
         setCampañas2([]);
+        setNombreUbicacion1("Ubicacion 1");
+        setNombreUbicacion2("Ubicacion 2");
       } finally {
         setLoading(false);
       }
@@ -88,6 +120,114 @@ export const RegionChartsSection = ({
     loadAllData();
   }, [añoDesde, añoHasta, cultivo, nivel, ubicacion1, ubicacion2, auth]);
 
+  const processedData = useMemo(() => {
+    const getYear = (item: any): number | null => {
+      if (!item || !item.año) return null;
+
+      const añoVal = item.año;
+
+      if (typeof añoVal === "number") {
+        return añoVal;
+      }
+
+      if (typeof añoVal === "string") {
+        const yearStr = añoVal.substring(0, 4);
+        const year = parseInt(yearStr, 10);
+
+        if (!isNaN(year) && yearStr.length === 4) {
+          return year;
+        }
+      }
+
+      try {
+        const year = new Date(añoVal).getUTCFullYear();
+        return isNaN(year) ? null : year;
+      } catch (e) {
+        return null;
+      }
+    };
+
+    const getMetric = (item: any): number | null => {
+      const metricKey = "total_ha_sembradas";
+      if (
+        item === null ||
+        item === undefined ||
+        item[metricKey] === null ||
+        item[metricKey] === undefined
+      ) {
+        return null;
+      }
+      const metric = parseFloat(item[metricKey]);
+      return isNaN(metric) ? null : metric;
+    };
+
+    const apiDataMap = new Map<
+      number,
+      { u1: number | null; u2: number | null }
+    >();
+
+    campañas1.forEach((item) => {
+      const year = getYear(item);
+      const metric = getMetric(item);
+      if (year) {
+        apiDataMap.set(year, { u1: metric, u2: null });
+      }
+    });
+
+    campañas2.forEach((item) => {
+      const year = getYear(item);
+      const metric = getMetric(item);
+      if (year) {
+        const existing = apiDataMap.get(year) || { u1: null, u2: null };
+        apiDataMap.set(year, { ...existing, u2: metric });
+      }
+    });
+
+    const finalChartMap = new Map<
+      number,
+      { u1: number | null; u2: number | null }
+    >();
+    const startYear = parseInt(añoDesde, 10);
+    const endYear = parseInt(añoHasta, 10);
+
+    if (!isNaN(startYear) && !isNaN(endYear) && endYear >= startYear) {
+      for (let i = startYear; i <= endYear; i++) {
+        const apiData = apiDataMap.get(i);
+
+        if (apiData) {
+          finalChartMap.set(i, apiData);
+        } else {
+          finalChartMap.set(i, { u1: null, u2: null });
+        }
+      }
+    } else if (apiDataMap.size > 0) {
+      apiDataMap.forEach((value, key) => {
+        finalChartMap.set(key, value);
+      });
+    }
+
+    const combined = Array.from(finalChartMap.entries()).map(
+      ([year, data]) => ({
+        name: year.toString(),
+        [nombreUbicacion1]: data.u1,
+        [nombreUbicacion2]: data.u2,
+      })
+    );
+
+    combined.sort((a, b) => parseInt(a.name, 10) - parseInt(b.name, 10));
+
+    console.log("Datos procesados para Recharts:", combined);
+
+    return combined;
+  }, [
+    campañas1,
+    campañas2,
+    nombreUbicacion1,
+    nombreUbicacion2,
+    añoDesde,
+    añoHasta,
+  ]);
+
   if (loading) {
     return (
       <section className="region-charts-section">
@@ -95,7 +235,6 @@ export const RegionChartsSection = ({
       </section>
     );
   }
-
   if (error) {
     return (
       <section className="region-charts-section">
@@ -103,8 +242,7 @@ export const RegionChartsSection = ({
       </section>
     );
   }
-
-  if (campañas1.length === 0 && campañas2.length === 0 && !loading) {
+  if (processedData.length === 0 && !loading) {
     return (
       <section className="region-charts-section">
         <p>
@@ -116,19 +254,41 @@ export const RegionChartsSection = ({
 
   return (
     <section className="region-charts-section">
-      {/* gráficos */}
-      {campañas1.length > 0 && (
-        <div>
-          <h4>Resultados para Ubicación 1</h4>
-          {/* <ComponenteDeGrafico data={campañas1} /> */}
-        </div>
-      )}
-      {campañas2.length > 0 && (
-        <div>
-          <h4>Resultados para Ubicación 2</h4>
-          {/* <ComponenteDeGrafico data={campañas2} /> */}
-        </div>
-      )}
+      <h3>Hectáreas Sembradas por Año</h3>
+      <div className="chart-wrapper">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            data={processedData}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+
+            <Line
+              type="monotone"
+              dataKey={nombreUbicacion1}
+              stroke="#8884d8"
+              activeDot={{ r: 8 }}
+              connectNulls
+            />
+
+            <Line
+              type="monotone"
+              dataKey={nombreUbicacion2}
+              stroke="#82ca9d"
+              connectNulls
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </section>
   );
 };
