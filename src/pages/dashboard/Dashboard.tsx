@@ -95,8 +95,8 @@ export const Dashboard = () => {
             placeholder="Desde año"
             name="year-desde"
             id="input-year-desde"
-            min="1960"
-            max="2025"
+            min="1970"
+            max="2023"
             step="1"
             value={selectedAñoDesde}
             onChange={(e) => {
@@ -117,8 +117,8 @@ export const Dashboard = () => {
             placeholder="Hasta año"
             name="year-hasta"
             id="input-year-hasta"
-            min={selectedAñoDesde ? Number(selectedAñoDesde) + 1 : 1960}
-            max="2025"
+            min={selectedAñoDesde ? Number(selectedAñoDesde) + 1 : 1970}
+            max="2023"
             step="1"
             value={selectedAñoHasta}
             onChange={(e) => setSelectedAñoHasta(e.target.value)}
