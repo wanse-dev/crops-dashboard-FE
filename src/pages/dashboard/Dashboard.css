@@ -7,7 +7,7 @@
 }
 
 .control-panel {
-  background-color: var(--color-sea-green-400);
+  background-color: var(--color-sea-green-300);
   padding: 15px;
   border-radius: 1px 1px 10px 10px;
   display: flex;
@@ -47,7 +47,7 @@
   font-size: 14px;
   font-weight: 600;
   color: #fff;
-  background-color: var(--color-sea-green-800);
+  background-color: var(--color-sea-green-700);
   border: none;
   border-radius: 6px;
   cursor: pointer;

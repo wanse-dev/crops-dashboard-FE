@@ -63,3 +63,9 @@
   font-weight: 600;
   margin-bottom: 5px !important;
 }
+
+.recharts-default-legend {
+  display: flex !important;
+  flex-direction: row-reverse !important;
+  justify-content: center !important;
+}

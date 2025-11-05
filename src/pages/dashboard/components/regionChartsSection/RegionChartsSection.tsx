@@ -275,7 +275,7 @@ export const RegionChartsSection = ({
             <Line
               type="monotone"
               dataKey={nombreUbicacion1}
-              stroke="#8884d8"
+              stroke="#93c2a1"
               activeDot={{ r: 8 }}
               connectNulls
             />
@@ -283,7 +283,7 @@ export const RegionChartsSection = ({
             <Line
               type="monotone"
               dataKey={nombreUbicacion2}
-              stroke="#82ca9d"
+              stroke="#316a47"
               connectNulls
             />
           </LineChart>

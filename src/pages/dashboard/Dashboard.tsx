@@ -273,7 +273,14 @@ export const Dashboard = () => {
           ubicacion1={appliedFilters.ubicacion1}
           ubicacion2={appliedFilters.ubicacion2}
         />
-        <ComparativeCropsSection />
+        <ComparativeCropsSection
+          añoDesde={appliedFilters.añoDesde}
+          añoHasta={appliedFilters.añoHasta}
+          cultivo={appliedFilters.cultivo}
+          nivel={appliedFilters.nivel}
+          ubicacion1={appliedFilters.ubicacion1}
+          ubicacion2={appliedFilters.ubicacion2}
+        />
       </div>
     </div>
   );
