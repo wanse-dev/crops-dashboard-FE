@@ -6,6 +6,8 @@ import type { PromedioData } from "../../../../types/PromedioData";
 import { useAuth } from "../../../../contexts/authContext";
 import axiosInstance from "../../../../config/axios";
 
+const TOLERANCE_POINTS = 2.0;
+
 // helper para el umbral
 const UmbralDot = ({ status }: { status: string }) => {
   return <div className={`umbral-dot ${status}`} />;
@@ -201,8 +203,6 @@ export const ComparativeCropsSection = ({
     let upperBound: number | undefined, lowerBound: number | undefined;
 
     if (avg !== undefined && avg !== null) {
-      const TOLERANCE_POINTS = 2.0;
-
       upperBound = avg + TOLERANCE_POINTS; // ej: si avg=10, upperBound=12
       lowerBound = avg - TOLERANCE_POINTS; // ej: si avg=10, lowerBound=8
     }
@@ -289,7 +289,7 @@ export const ComparativeCropsSection = ({
             <tr>
               <th>Año</th>
               <th>% Ha perdidas</th>
-              <th>Umbral</th>
+              <th>Umbral ({TOLERANCE_POINTS}%)</th>
             </tr>
           </thead>
           <tbody>
