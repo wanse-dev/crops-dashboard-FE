@@ -56,42 +56,44 @@ export const Login = () => {
   if (auth?.userLoggedIn) return <Navigate to="/" />;
 
   return (
-    <div className="login auth-container">
-      <h1>Iniciar sesión</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input
-          {...register("email")}
-          autoComplete="current-email"
-          className="text-input"
-          placeholder="Ingrese su email"
-        />
-        {errors.email && <span>{errors.email.message}</span>}
-
-        <div className="password-wrapper">
+    <div className="auth-container">
+      <div className="login">
+        <h1>Iniciar sesión</h1>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <input
-            {...register("password")}
-            type={showPassword ? "text" : "password"}
-            autoComplete="current-password"
-            className="text-input password-input"
-            placeholder="Ingrese su contraseña"
+            {...register("email")}
+            autoComplete="current-email"
+            className="text-input"
+            placeholder="Ingrese su email"
           />
-          <button
-            type="button"
-            className="toggle-password-icon"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <LuEyeOff size={20} /> : <LuEye size={20} />}
+          {errors.email && <span>{errors.email.message}</span>}
+
+          <div className="password-wrapper">
+            <input
+              {...register("password")}
+              type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
+              className="text-input password-input"
+              placeholder="Ingrese su contraseña"
+            />
+            <button
+              type="button"
+              className="toggle-password-icon"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <LuEyeOff size={20} /> : <LuEye size={20} />}
+            </button>
+          </div>
+          {errors.password && <span>{errors.password.message}</span>}
+
+          <button type="submit" className="submit-button">
+            {isLoggingIn ? "Iniciando sesión..." : "Iniciar sesión"}
           </button>
-        </div>
-        {errors.password && <span>{errors.password.message}</span>}
+          {error && <span style={{ color: "red" }}>{error}</span>}
+        </form>
 
-        <button type="submit" className="submit-button">
-          {isLoggingIn ? "Iniciando sesión..." : "Iniciar sesión"}
-        </button>
-        {error && <span style={{ color: "red" }}>{error}</span>}
-      </form>
-
-      <Link to="/register">¿No tienes ningún usuario? Regístrate</Link>
+        <Link to="/register">¿No tienes ningún usuario? Regístrate</Link>
+      </div>
     </div>
   );
 };

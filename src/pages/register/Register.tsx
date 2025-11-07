@@ -55,12 +55,9 @@ export const Register = () => {
       const user = await createUser(data.email, data.password);
       const sendData = {
         uid_usuario: user.uid,
-        nombre: data.username
+        nombre: data.username,
       };
-      const response = await axiosInstance.post(
-        "/usuario",
-        sendData
-      );
+      const response = await axiosInstance.post("/usuario", sendData);
       console.debug("User created in backend:", response.data);
       navigate("/");
     } catch (error) {
@@ -71,48 +68,50 @@ export const Register = () => {
   };
 
   return (
-    <div className="register auth-container">
-      <h1>Registrar una cuenta</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input
-          {...register("username")}
-          className="text-input"
-          placeholder="Ingrese un nombre de usuario"
-        />
-        {errors.username && <span>{errors.username.message}</span>}
-
-        <input
-          {...register("email")}
-          autoComplete="current-email"
-          className="text-input"
-          placeholder="Ingrese un email"
-        />
-        {errors.email && <span>{errors.email.message}</span>}
-
-        <div className="password-wrapper">
+    <div className="auth-container">
+      <div className="register">
+        <h1>Registrar una cuenta</h1>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <input
-            {...register("password")}
-            type={showPassword ? "text" : "password"}
-            autoComplete="current-password"
-            className="text-input password-input"
-            placeholder="Ingrese una contraseña"
+            {...register("username")}
+            className="text-input"
+            placeholder="Ingrese un nombre de usuario"
           />
-          <button
-            type="button"
-            className="toggle-password-icon"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <LuEyeOff size={20} /> : <LuEye size={20} />}
+          {errors.username && <span>{errors.username.message}</span>}
+
+          <input
+            {...register("email")}
+            autoComplete="current-email"
+            className="text-input"
+            placeholder="Ingrese un email"
+          />
+          {errors.email && <span>{errors.email.message}</span>}
+
+          <div className="password-wrapper">
+            <input
+              {...register("password")}
+              type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
+              className="text-input password-input"
+              placeholder="Ingrese una contraseña"
+            />
+            <button
+              type="button"
+              className="toggle-password-icon"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <LuEyeOff size={20} /> : <LuEye size={20} />}
+            </button>
+          </div>
+          {errors.password && <span>{errors.password.message}</span>}
+
+          <button type="submit" className="submit-button">
+            {isRegistering ? "Creando usuario..." : "Registrarse"}
           </button>
-        </div>
-        {errors.password && <span>{errors.password.message}</span>}
+        </form>
 
-        <button type="submit" className="submit-button">
-          {isRegistering ? "Creando usuario..." : "Registrarse"}
-        </button>
-      </form>
-
-      <Link to="/login">¿Ya tienes una cuenta? Iniciar sesión</Link>
+        <Link to="/login">¿Ya tienes una cuenta? Iniciar sesión</Link>
+      </div>
     </div>
   );
 };
