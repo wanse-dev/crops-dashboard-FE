@@ -39,12 +39,10 @@ export const RegionChartsSection = ({
       if (!nivel || !locationId) {
         return [];
       }
-
       const firebaseUID = auth?.currentUser?.uid;
       if (!firebaseUID) {
         throw new Error("El usuario no está autenticado");
       }
-
       let endpointBase = "";
       if (nivel === "region") {
         endpointBase = "/campana/porRegion";
@@ -55,15 +53,12 @@ export const RegionChartsSection = ({
       } else {
         return [];
       }
-
       const endpoint = `${endpointBase}/${locationId}`;
-
       const params = {
         añoDesde: añoDesde ? `${añoDesde}-01-01` : undefined,
         añoHasta: añoHasta ? `${añoHasta}-12-31` : undefined,
         cultivo: cultivo || undefined,
       };
-
       const response = await axiosInstance.get(endpoint, { params });
       return response.data.data || [];
     };
@@ -74,16 +69,13 @@ export const RegionChartsSection = ({
         setCampañas2([]);
         return;
       }
-
       setLoading(true);
       setError(null);
-
       try {
         const [data1, data2] = await Promise.all([
           fetchDatosUbicacion(ubicacion1),
           fetchDatosUbicacion(ubicacion2),
         ]);
-
         const getNameFromData = (
           data: any[],
           currentNivel: string
@@ -96,13 +88,10 @@ export const RegionChartsSection = ({
           if (currentNivel === "pais" && item.pais) return item.pais;
           return null;
         };
-
         setNombreUbicacion1(getNameFromData(data1, nivel) || "Ubicacion 1");
         setNombreUbicacion2(getNameFromData(data2, nivel) || "Ubicacion 2");
-
         setCampañas1(data1);
         setCampañas2(data2);
-
         console.debug("API response for Ubicacion 1:", data1);
         console.debug("API response for Ubicacion 2:", data2);
       } catch (error: any) {
@@ -116,29 +105,23 @@ export const RegionChartsSection = ({
         setLoading(false);
       }
     };
-
     loadAllData();
   }, [añoDesde, añoHasta, cultivo, nivel, ubicacion1, ubicacion2, auth]);
 
   const processedData = useMemo(() => {
     const getYear = (item: any): number | null => {
       if (!item || !item.año) return null;
-
       const añoVal = item.año;
-
       if (typeof añoVal === "number") {
         return añoVal;
       }
-
       if (typeof añoVal === "string") {
         const yearStr = añoVal.substring(0, 4);
         const year = parseInt(yearStr, 10);
-
         if (!isNaN(year) && yearStr.length === 4) {
           return year;
         }
       }
-
       try {
         const year = new Date(añoVal).getUTCFullYear();
         return isNaN(year) ? null : year;
@@ -146,9 +129,7 @@ export const RegionChartsSection = ({
         return null;
       }
     };
-
-    const getMetric = (item: any): number | null => {
-      const metricKey = "total_ha_sembradas";
+    const getMetricValue = (item: any, metricKey: string): number | null => {
       if (
         item === null ||
         item === undefined ||
@@ -160,44 +141,69 @@ export const RegionChartsSection = ({
       const metric = parseFloat(item[metricKey]);
       return isNaN(metric) ? null : metric;
     };
-
     const apiDataMap = new Map<
       number,
-      { u1: number | null; u2: number | null }
+      {
+        u1_sembradas: number | null;
+        u1_cosechadas: number | null;
+        u2_sembradas: number | null;
+        u2_cosechadas: number | null;
+      }
     >();
-
     campañas1.forEach((item) => {
       const year = getYear(item);
-      const metric = getMetric(item);
+      const metricSembradas = getMetricValue(item, "total_ha_sembradas");
+      const metricCosechadas = getMetricValue(item, "total_ha_cosechadas");
       if (year) {
-        apiDataMap.set(year, { u1: metric, u2: null });
+        apiDataMap.set(year, {
+          u1_sembradas: metricSembradas,
+          u1_cosechadas: metricCosechadas,
+          u2_sembradas: null,
+          u2_cosechadas: null,
+        });
       }
     });
-
     campañas2.forEach((item) => {
       const year = getYear(item);
-      const metric = getMetric(item);
+      const metricSembradas = getMetricValue(item, "total_ha_sembradas");
+      const metricCosechadas = getMetricValue(item, "total_ha_cosechadas");
       if (year) {
-        const existing = apiDataMap.get(year) || { u1: null, u2: null };
-        apiDataMap.set(year, { ...existing, u2: metric });
+        const existing = apiDataMap.get(year) || {
+          u1_sembradas: null,
+          u1_cosechadas: null,
+          u2_sembradas: null,
+          u2_cosechadas: null,
+        };
+        apiDataMap.set(year, {
+          ...existing,
+          u2_sembradas: metricSembradas,
+          u2_cosechadas: metricCosechadas,
+        });
       }
     });
-
     const finalChartMap = new Map<
       number,
-      { u1: number | null; u2: number | null }
+      {
+        u1_sembradas: number | null;
+        u1_cosechadas: number | null;
+        u2_sembradas: number | null;
+        u2_cosechadas: number | null;
+      }
     >();
     const startYear = parseInt(añoDesde, 10);
     const endYear = parseInt(añoHasta, 10);
-
     if (!isNaN(startYear) && !isNaN(endYear) && endYear >= startYear) {
       for (let i = startYear; i <= endYear; i++) {
         const apiData = apiDataMap.get(i);
-
         if (apiData) {
           finalChartMap.set(i, apiData);
         } else {
-          finalChartMap.set(i, { u1: null, u2: null });
+          finalChartMap.set(i, {
+            u1_sembradas: null,
+            u1_cosechadas: null,
+            u2_sembradas: null,
+            u2_cosechadas: null,
+          });
         }
       }
     } else if (apiDataMap.size > 0) {
@@ -205,19 +211,17 @@ export const RegionChartsSection = ({
         finalChartMap.set(key, value);
       });
     }
-
     const combined = Array.from(finalChartMap.entries()).map(
       ([year, data]) => ({
         name: year.toString(),
-        [nombreUbicacion1]: data.u1,
-        [nombreUbicacion2]: data.u2,
+        [`${nombreUbicacion1} (Sembradas)`]: data.u1_sembradas,
+        [`${nombreUbicacion1} (Cosechadas)`]: data.u1_cosechadas,
+        [`${nombreUbicacion2} (Sembradas)`]: data.u2_sembradas,
+        [`${nombreUbicacion2} (Cosechadas)`]: data.u2_cosechadas,
       })
     );
-
     combined.sort((a, b) => parseInt(a.name, 10) - parseInt(b.name, 10));
-
     console.log("Datos procesados para Recharts:", combined);
-
     return combined;
   }, [
     campañas1,
@@ -252,9 +256,72 @@ export const RegionChartsSection = ({
     );
   }
 
+  const renderLegend = (props: any) => {
+    const { payload } = props;
+
+    const entry1 = payload.find(
+      (entry: any) => entry.value === `${nombreUbicacion1} (Sembradas)`
+    );
+    const entry2 = payload.find(
+      (entry: any) => entry.value === `${nombreUbicacion2} (Sembradas)`
+    );
+
+    const renderItem = (entry: any, label: string) => {
+      if (!entry) return null;
+
+      return (
+        <li
+          key={entry.value}
+          style={{
+            display: "inline-block",
+            marginRight: "10px",
+            cursor: "pointer",
+          }}
+        >
+          <svg
+            width="14"
+            height="10"
+            style={{
+              display: "inline-block",
+              marginRight: "5px",
+              verticalAlign: "middle",
+            }}
+          >
+            <line
+              x1="0"
+              y1="5"
+              x2="14"
+              y2="5"
+              stroke={entry.color}
+              strokeWidth="2"
+            />
+          </svg>
+          <span style={{ color: "#333", verticalAlign: "middle" }}>
+            {label}
+          </span>
+        </li>
+      );
+    };
+
+    return (
+      <ul
+        style={{
+          listStyle: "none",
+          margin: "0",
+          padding: "0",
+          textAlign: "center",
+        }}
+      >
+        {ubicacion1 && entry1 && renderItem(entry1, nombreUbicacion1)}
+
+        {ubicacion2 && entry2 && renderItem(entry2, nombreUbicacion2)}
+      </ul>
+    );
+  };
+
   return (
     <section className="region-charts-section">
-      <h3>Hectáreas sembradas por año</h3>
+      <h3>Hectáreas sembradas y cosechadas por año</h3>
       <div className="chart-wrapper">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
@@ -270,21 +337,39 @@ export const RegionChartsSection = ({
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
-            <Legend />
+            <Legend content={renderLegend} />
 
             <Line
               type="monotone"
-              dataKey={nombreUbicacion1}
+              dataKey={`${nombreUbicacion1} (Sembradas)`}
               stroke="#93c2a1"
               activeDot={{ r: 8 }}
               connectNulls
             />
+            <Line
+              type="monotone"
+              dataKey={`${nombreUbicacion1} (Cosechadas)`}
+              stroke="#93c2a1"
+              strokeDasharray="5 5"
+              connectNulls
+              dot={false}
+              activeDot={false}
+            />
 
             <Line
               type="monotone"
-              dataKey={nombreUbicacion2}
+              dataKey={`${nombreUbicacion2} (Sembradas)`}
               stroke="#316a47"
               connectNulls
+            />
+            <Line
+              type="monotone"
+              dataKey={`${nombreUbicacion2} (Cosechadas)`}
+              stroke="#316a47"
+              strokeDasharray="5 5"
+              connectNulls
+              dot={false}
+              activeDot={false}
             />
           </LineChart>
         </ResponsiveContainer>

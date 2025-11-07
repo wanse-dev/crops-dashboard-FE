@@ -54,8 +54,6 @@ export const ComparativeCropsSection = ({
 
   const auth = useAuth();
 
-  // --- CAMBIO 1 ---
-  // Este useEffect fuerza el botón seleccionado si solo hay una ubicación
   useEffect(() => {
     const hasUbi1 = !!ubicacion1;
     const hasUbi2 = !!ubicacion2;
@@ -65,7 +63,7 @@ export const ComparativeCropsSection = ({
     } else if (!hasUbi1 && hasUbi2) {
       setSelectedButton("place2");
     } else if (!hasUbi1 && !hasUbi2) {
-      setSelectedButton("place1"); // Resetea si ambas se limpian
+      setSelectedButton("place1");
     }
   }, [ubicacion1, ubicacion2]);
 
@@ -128,8 +126,6 @@ export const ComparativeCropsSection = ({
 
     // ejecución de todas las llamadas
     const loadAllData = async () => {
-      // --- CAMBIO 2 ---
-      // Se modificó la condición: ahora se ejecuta si hay AL MENOS UNA ubicación
       if (!nivel || (!ubicacion1 && !ubicacion2)) {
         setCampañas1([]);
         setCampañas2([]);
@@ -244,8 +240,6 @@ export const ComparativeCropsSection = ({
             type="button"
             className={selectedButton === "place1" ? "selected" : ""}
             onClick={() => setSelectedButton("place1")}
-            // --- CAMBIO 3 ---
-            // El botón se deshabilita si está cargando O si no hay ubicacion1
             disabled={loading || !ubicacion1}
           >
             {nombreUbicacion1}
@@ -254,8 +248,6 @@ export const ComparativeCropsSection = ({
             type="button"
             className={selectedButton === "place2" ? "selected" : ""}
             onClick={() => setSelectedButton("place2")}
-            // --- CAMBIO 4 ---
-            // El botón se deshabilita si está cargando O si no hay ubicacion2
             disabled={loading || !ubicacion2}
           >
             {nombreUbicacion2}
@@ -289,7 +281,7 @@ export const ComparativeCropsSection = ({
             <tr>
               <th>Año</th>
               <th>% Ha perdidas</th>
-              <th>Umbral ({TOLERANCE_POINTS}%)</th>
+              <th>Tolerancia ({TOLERANCE_POINTS}%)</th>
             </tr>
           </thead>
           <tbody>
